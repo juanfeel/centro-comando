@@ -44,6 +44,14 @@
         </div>
     </div>
 
+<!-- Botón superior en index.html -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="text-primary">Flota de Servidores</h1>
+    <a href="{% url 'crear_servidor' %}" class="btn btn-success fw-bold">+ Nuevo Servidor</a>
+</div>
+
+
+
 
     <!-- Tabla de servidores -->
     <div class="card shadow-sm border-0 mb-5">
@@ -67,6 +75,8 @@
                             <th>Contenedores</th>
                             <th>Proxy Nginx</th>
                             <th>Estado</th>
+                            <th>Opciones</th>
+
                         </tr>
                     </thead>
 
@@ -117,6 +127,13 @@
                                         Mantenimiento
                                     </span>
                                 {% endif %}
+                            </td>
+
+                            <!-- Columna de acciones dentro de la tabla -->
+                            <td class="text-end">
+                                <a href="{% url 'detalle_servidor' nodo.pk %}" class="btn btn-sm btn-outline-primary">Ver</a>
+                                <a href="{% url 'editar_servidor' nodo.pk %}" class="btn btn-sm btn-outline-warning">Editar</a>
+                                <a href="{% url 'eliminar_servidor' nodo.pk %}" class="btn btn-sm btn-outline-danger">Eliminar</a>
                             </td>
 
                         </tr>
