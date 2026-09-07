@@ -79,3 +79,48 @@ class RegistroAuditoria(models.Model):
         verbose_name = "Registro de Auditoría"
         verbose_name_plural = "Historial de Auditorías"
 
+class IncidenciaServidor(models.Model):
+    SEVERIDAD_CHOICES = [
+        ('baja', 'Baja'),
+        ('media', 'Media'),
+        ('alta', 'Alta'),
+        ('critica', 'Crítica'),
+    ]
+
+    servidor = models.ForeignKey(
+        NodoServidor,
+        on_delete=models.CASCADE,
+        related_name='incidencias'
+    )
+
+    titulo = models.CharField(
+        max_length=150,
+        verbose_name="Título de la Incidencia"
+    )
+
+    descripcion = models.TextField(
+        verbose_name="Descripción del Fallo"
+    )
+
+    severidad = models.CharField(
+        max_length=10,
+        choices=SEVERIDAD_CHOICES,
+        default='media'
+    )
+
+    resuelta = models.BooleanField(
+        default=False,
+        verbose_name="¿Incidencia Resuelta?"
+    )
+
+    fecha_registro = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    def __str__(self):
+        return f"[{self.severidad.upper()}] {self.titulo} - {self.servidor.nombre_host}"
+
+    class Meta:
+        verbose_name = "Incidencia de Servidor"
+        verbose_name_plural = "Incidencias de Servidores"
+        ordering = ['-fecha_registro']

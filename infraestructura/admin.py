@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import NodoServidor, RegistroAuditoria  # <--- Asegúrate de importar RegistroAuditoria
+from .models import NodoServidor, RegistroAuditoria, IncidenciaServidor  # <--- agrega IncidenciaServidor aquí
 
 # Acciones masivas personalizadas
 @admin.action(description="Activar Producción Masiva")
@@ -10,6 +10,11 @@ def marcar_como_produccion(modeladmin, request, queryset):
 @admin.action(description="Poner en Mantenimiento")
 def marcar_como_mantenimiento(modeladmin, request, queryset):
     queryset.update(en_produccion=False)
+
+
+@admin.action(description="Marcar como Resueltas")
+def marcar_como_resueltas(modeladmin, request, queryset):
+    queryset.update(resuelta=True)
 
 
 @admin.register(NodoServidor)
@@ -51,3 +56,12 @@ class RegistroAuditoriaAdmin(admin.ModelAdmin):
     list_filter = ('fecha_evento', 'servidor')
     search_fields = ('servidor__nombre_host', 'detalles')
     readonly_fields = ('fecha_evento',)
+
+
+@admin.register(IncidenciaServidor)
+class IncidenciaServidorAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'servidor', 'severidad', 'resuelta', 'fecha_registro')
+    list_filter = ('severidad', 'resuelta', 'servidor')
+    search_fields = ('titulo', 'descripcion', 'servidor__nombre_host')
+    ordering = ('-fecha_registro',)
+    actions = [marcar_como_resueltas]
