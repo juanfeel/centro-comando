@@ -1,17 +1,22 @@
-from django.urls import path
+from django.urls import path, include
+from .router import router
 from .views import (
     lista_servidores, detalle_servidor, crear_servidor, editar_servidor, eliminar_servidor,
     crear_incidencia, resolver_incidencia
 )
 
 urlpatterns = [
+    # Rutas Web (Plantillas HTML)
     path('', lista_servidores, name='lista_servidores'),
     path('servidor/<int:pk>/', detalle_servidor, name='detalle_servidor'),
     path('servidor/nuevo/', crear_servidor, name='crear_servidor'),
     path('servidor/<int:pk>/editar/', editar_servidor, name='editar_servidor'),
     path('servidor/<int:pk>/eliminar/', eliminar_servidor, name='eliminar_servidor'),
 
-    # Incidencias
+    # Incidencias HTML
     path('servidor/<int:pk>/incidencia/nueva/', crear_incidencia, name='crear_incidencia'),
     path('incidencia/<int:pk>/resolver/', resolver_incidencia, name='resolver_incidencia'),
+
+    # API REST (Endpoints JSON)
+    path('api/', include(router.urls)),
 ]

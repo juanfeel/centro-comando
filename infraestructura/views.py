@@ -1,6 +1,17 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from.forms import NodoServidorForm, IncidenciaServidorForm
-from .models import NodoServidor, IncidenciaServidor
+from rest_framework import viewsets
+
+from .forms import NodoServidorForm, IncidenciaServidorForm
+from .models import NodoServidor, RegistroAuditoria, IncidenciaServidor
+from .serializers import (
+    NodoServidorSerializer,
+    RegistroAuditoriaSerializer,
+    IncidenciaServidorSerializer,
+)
+
+# ==========================================
+# VISTAS HTML TRADICIONALES (PLANTILLAS)
+# ==========================================
 
 def eliminar_servidor(request, pk):
     nodo = get_object_or_404(NodoServidor, pk=pk)
@@ -31,14 +42,14 @@ def crear_servidor(request):
     return render(request, 'infraestructura/crear_servidor.html', {'form': form})
 
 def detalle_servidor(request, pk):
-	servidor = get_object_or_404(NodoServidor, pk=pk)
-	contexto = {'nodo' : servidor}
-	return render(request, 'infraestructura/detalle.html', contexto)
+    servidor = get_object_or_404(NodoServidor, pk=pk)
+    contexto = {'nodo': servidor}
+    return render(request, 'infraestructura/detalle.html', contexto)
 
 def lista_servidores(request):
-	servidores = NodoServidor.objects.all()
-	contexto = {'servidores': servidores}
-	return render(request, 'infraestructura/index.html', contexto)
+    servidores = NodoServidor.objects.all()
+    contexto = {'servidores': servidores}
+    return render(request, 'infraestructura/index.html', contexto)
 
 def crear_incidencia(request, pk):
     servidor = get_object_or_404(NodoServidor, pk=pk)
@@ -54,9 +65,25 @@ def crear_incidencia(request, pk):
     contexto = {'form': form, 'nodo': servidor}
     return render(request, 'infraestructura/crear_incidencia.html', contexto)
 
-
 def resolver_incidencia(request, pk):
     incidencia = get_object_or_404(IncidenciaServidor, pk=pk)
     incidencia.resuelta = True
     incidencia.save()
     return redirect('detalle_servidor', pk=incidencia.servidor.pk)
+
+
+# ==========================================
+# VISTAS API REST (DJANGO REST FRAMEWORK)
+# ==========================================
+
+class NodoServidorViewSet(viewsets.ModelViewSet):
+    queryset = NodoServidor.objects.all()
+    serializer_class = NodoServidorSerializer
+
+class RegistroAuditoriaViewSet(viewsets.ModelViewSet):
+    queryset = RegistroAuditoria.objects.all()
+    serializer_class = RegistroAuditoriaSerializer
+
+class IncidenciaServidorViewSet(viewsets.ModelViewSet):
+    queryset = IncidenciaServidor.objects.all()
+    serializer_class = IncidenciaServidorSerializer

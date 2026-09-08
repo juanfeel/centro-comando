@@ -123,4 +123,4 @@ class IncidenciaServidor(models.Model):
     class Meta:
         verbose_name = "Incidencia de Servidor"
         verbose_name_plural = "Incidencias de Servidores"
-        ordering = ['-fecha_registro']
+        ordering = ['-fecha_registro'] 
