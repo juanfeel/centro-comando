@@ -87,3 +87,48 @@ class RegistroAuditoriaViewSet(viewsets.ModelViewSet):
 class IncidenciaServidorViewSet(viewsets.ModelViewSet):
     queryset = IncidenciaServidor.objects.all()
     serializer_class = IncidenciaServidorSerializer
+
+
+from django.urls import reverse_lazy
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
+
+from .forms import MantenimientoForm
+from .models import MantenimientoNodo
+
+
+class MantenimientoListView(ListView):
+    model = MantenimientoNodo
+    template_name = 'infraestructura/mantenimiento_list.html'
+    context_object_name = 'mantenimientos'
+
+
+class MantenimientoDetailView(DetailView):
+    model = MantenimientoNodo
+    template_name = 'infraestructura/mantenimiento_detail.html'
+    context_object_name = 'mantenimiento'
+
+
+class MantenimientoCreateView(CreateView):
+    model = MantenimientoNodo
+    form_class = MantenimientoForm
+    template_name = 'infraestructura/mantenimiento_form.html'
+    success_url = reverse_lazy('lista_mantenimientos')
+
+
+class MantenimientoUpdateView(UpdateView):
+    model = MantenimientoNodo
+    form_class = MantenimientoForm
+    template_name = 'infraestructura/mantenimiento_form.html'
+    success_url = reverse_lazy('lista_mantenimientos')
+
+
+class MantenimientoDeleteView(DeleteView):
+    model = MantenimientoNodo
+    template_name = 'infraestructura/mantenimiento_confirm_delete.html'
+    success_url = reverse_lazy('lista_mantenimientos')

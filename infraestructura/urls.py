@@ -2,7 +2,11 @@ from django.urls import path, include
 from .router import router
 from .views import (
     lista_servidores, detalle_servidor, crear_servidor, editar_servidor, eliminar_servidor,
-    crear_incidencia, resolver_incidencia
+    crear_incidencia, resolver_incidencia, MantenimientoCreateView,
+        MantenimientoDeleteView,
+        MantenimientoDetailView,
+        MantenimientoListView,
+        MantenimientoUpdateView,
 )
 
 urlpatterns = [
@@ -19,4 +23,33 @@ urlpatterns = [
 
     # API REST (Endpoints JSON)
     path('api/', include(router.urls)),
+]
+
+
+urlpatterns += [
+    path(
+        'mantenimientos/',
+        MantenimientoListView.as_view(),
+        name='lista_mantenimientos',
+    ),
+    path(
+        'mantenimientos/<int:pk>/',
+        MantenimientoDetailView.as_view(),
+        name='detalle_mantenimiento',
+    ),
+    path(
+        'mantenimientos/nuevo/',
+        MantenimientoCreateView.as_view(),
+        name='crear_mantenimiento',
+    ),
+    path(
+        'mantenimientos/<int:pk>/editar/',
+        MantenimientoUpdateView.as_view(),
+        name='editar_mantenimiento',
+    ),
+    path(
+        'mantenimientos/<int:pk>/eliminar/',
+        MantenimientoDeleteView.as_view(),
+        name='eliminar_mantenimiento',
+    ),
 ]
